@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Arivu™</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+
+    <script src="js/jquery-3.4.1.min.js"></script>
+  </head>
+  <body class="light">
+        <div id="unity-container" class="unity-desktop">
+          <canvas id="unity-canvas"></canvas>
+          <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+              <div id="unity-progress-bar-full"></div>
+            </div>
+          </div>
+          <div id="unity-footer">
+            <!--div id="unity-webgl-logo"></div-->
+            <div id="unity-fullscreen-button"></div>
+            <!-- <div id="unity-build-title">PointCloudViewer</div> -->
+            <div id="arius-logo"></div>
+            <div id="cozier-logo"></div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+    <script>
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/PointCloudViewer.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/PointCloudViewer.data.unityweb",
+        frameworkUrl: buildUrl + "/PointCloudViewer.framework.js.unityweb",
+        codeUrl: buildUrl + "/PointCloudViewer.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "LNG Studios",
+        productName: "PointCloudViewer",
+        productVersion: "0.50",
+      };
+
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var footer = document.querySelector("#unity-footer");
+      var ariuslogo = document.querySelector("#arius-logo");
+      var crozierlogo = document.querySelector("#cozier-logo");
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        container.className = "unity-mobile";
+        config.devicePixelRatio = 1;
+      } else {
+        canvas.style.width = "960px";
+        container.style.width = canvas.style.width;
+        canvas.style.height = "600px";
+        // container.style.height = canvas.style.height;
+        container.style.height = 600 + $( footer ).height() + "px";
+      }
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+          
+          ariuslogo.onclick = () => {
+            window.open("https://www.ariustechnology.com/");
+          };
+
+          crozierlogo.onclick = () => {
+            window.open("https://www.crozierfinearts.com/");
+          };
+
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+
+      document.body.appendChild(script);
+    </script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

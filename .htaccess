@@ -1,0 +1,7 @@
+  RemoveType .br
+  RemoveLanguage .br
+  AddEncoding br .br
+  AddType application/octet-stream .data.br
+  AddType application/wasm .wasm.br
+  AddType application/javascript .js.br
+  AddType application/octet-stream .symbols.json.br
